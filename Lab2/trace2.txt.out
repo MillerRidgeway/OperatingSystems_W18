@@ -1,0 +1,55 @@
+1:# Set memory size to 2MB
+2:memsize 200000
+3:
+4:# Check that memory is initialized to 0
+5:diff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0  0
+6:diff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0  100000
+7:diff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0  1ffff0
+8:
+9:# Preset all memory
+10:replicate ab 200000 0
+11:
+12:# Check that memory is initialized to ab
+13:diff ab ab ab ab ab ab ab ab ab ab ab ab ab ab ab ab  0
+14:diff ab ab ab ab ab ab ab ab ab ab ab ab ab ab ab ab  100000
+15:diff ab ab ab ab ab ab ab ab ab ab ab ab ab ab ab ab  1ffff0
+16:
+17:# Test replicate, duplicate, and diff
+18:replicate d 80 1fea00
+19:replicate e 70 1fea80
+20:diff d d d d d e e e e e  1fea7b
+21:replicate c 4 1fea7e
+22:diff d d d c c c c e e e  1fea7b
+23:store 1 2 3 4 1fea7e
+24:diff d d d 1 2 3 4 e e e  1fea7b
+25:store a8 a9 aa ab ac ad ae af  1feae8
+26:diff e e a8 a9 aa ab ac ad ae af  1feae6 
+27:duplicate 8 1feae6 1feff8
+28:diff e e a8 a9 aa ab ac ad  1feff8
+29:
+30:# Test that diff reports differences; next line should find 4 differing bytes
+31:diff d d d e e  e 1fea7d
+diff error at address 1fea7e, expected d, actual is 1
+diff error at address 1fea7f, expected d, actual is 2
+diff error at address 1fea80, expected e, actual is 3
+diff error at address 1fea81, expected e, actual is 4
+32:print f0  1fea00
+1fea00
+ 0d 0d 0d 0d 0d 0d 0d 0d 0d 0d 0d 0d 0d 0d 0d 0d
+ 0d 0d 0d 0d 0d 0d 0d 0d 0d 0d 0d 0d 0d 0d 0d 0d
+ 0d 0d 0d 0d 0d 0d 0d 0d 0d 0d 0d 0d 0d 0d 0d 0d
+ 0d 0d 0d 0d 0d 0d 0d 0d 0d 0d 0d 0d 0d 0d 0d 0d
+ 0d 0d 0d 0d 0d 0d 0d 0d 0d 0d 0d 0d 0d 0d 0d 0d
+ 0d 0d 0d 0d 0d 0d 0d 0d 0d 0d 0d 0d 0d 0d 0d 0d
+ 0d 0d 0d 0d 0d 0d 0d 0d 0d 0d 0d 0d 0d 0d 0d 0d
+ 0d 0d 0d 0d 0d 0d 0d 0d 0d 0d 0d 0d 0d 0d 01 02
+ 03 04 0e 0e 0e 0e 0e 0e 0e 0e 0e 0e 0e 0e 0e 0e
+ 0e 0e 0e 0e 0e 0e 0e 0e 0e 0e 0e 0e 0e 0e 0e 0e
+ 0e 0e 0e 0e 0e 0e 0e 0e 0e 0e 0e 0e 0e 0e 0e 0e
+ 0e 0e 0e 0e 0e 0e 0e 0e 0e 0e 0e 0e 0e 0e 0e 0e
+ 0e 0e 0e 0e 0e 0e 0e 0e 0e 0e 0e 0e 0e 0e 0e 0e
+ 0e 0e 0e 0e 0e 0e 0e 0e 0e 0e 0e 0e 0e 0e 0e 0e
+ 0e 0e 0e 0e 0e 0e 0e 0e a8 a9 aa ab ac ad ae af
+33:print 10  1feff0
+1feff0
+ ab ab ab ab ab ab ab ab 0e 0e a8 a9 aa ab ac ad

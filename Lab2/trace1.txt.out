@@ -1,0 +1,45 @@
+1:# Set memory size to 64K
+2:memsize 10000
+3:
+4:# Store some bytes and then check values
+5:store   81 82 83 84 85  efa0
+6:store   92  efa2
+7:diff    81 82 92 84 85  efa0
+8:
+9:# Try storing at end of memory
+10:store   aa  bb  fffe
+11:diff    aa  bb  fffe
+12:
+13:# Test replicate
+14:replicate de b  ef0b
+15:diff  00 de de de de de de de de de de de 00 ef0a
+16:
+17:# Test duplicate
+18:replicate cc  10    ef20
+19:duplicate 5   ef20  ef0c
+20:diff de cc cc cc cc cc de ef0b
+21:diff    81 82 92 84 85  efa0
+22:
+23:# Test print
+24:replicate aa 40 efc0
+25:print 100 ef00
+ef00
+ 00 00 00 00 00 00 00 00 00 00 00 de cc cc cc cc
+ cc de de de de de 00 00 00 00 00 00 00 00 00 00
+ cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc
+ 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ 81 82 92 84 85 00 00 00 00 00 00 00 00 00 00 00
+ 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ aa aa aa aa aa aa aa aa aa aa aa aa aa aa aa aa
+ aa aa aa aa aa aa aa aa aa aa aa aa aa aa aa aa
+ aa aa aa aa aa aa aa aa aa aa aa aa aa aa aa aa
+ aa aa aa aa aa aa aa aa aa aa aa aa aa aa aa aa
+26:print 10 fff0
+fff0
+ 00 00 00 00 00 00 00 00 00 00 00 00 00 00 aa bb

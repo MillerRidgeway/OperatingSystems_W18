@@ -1,0 +1,33 @@
+# Set memory size to 2MB
+memsize 200000
+
+# Check that memory is initialized to 0
+diff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0  0
+diff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0  100000
+diff 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0  1ffff0
+
+# Preset all memory
+replicate ab 200000 0
+
+# Check that memory is initialized to ab
+diff ab ab ab ab ab ab ab ab ab ab ab ab ab ab ab ab  0
+diff ab ab ab ab ab ab ab ab ab ab ab ab ab ab ab ab  100000
+diff ab ab ab ab ab ab ab ab ab ab ab ab ab ab ab ab  1ffff0
+
+# Test replicate, duplicate, and diff
+replicate d 80 1fea00
+replicate e 70 1fea80
+diff d d d d d e e e e e  1fea7b
+replicate c 4 1fea7e
+diff d d d c c c c e e e  1fea7b
+store 1 2 3 4 1fea7e
+diff d d d 1 2 3 4 e e e  1fea7b
+store a8 a9 aa ab ac ad ae af  1feae8
+diff e e a8 a9 aa ab ac ad ae af  1feae6 
+duplicate 8 1feae6 1feff8
+diff e e a8 a9 aa ab ac ad  1feff8
+
+# Test that diff reports differences; next line should find 4 differing bytes
+diff d d d e e  e 1fea7d
+print f0  1fea00
+print 10  1feff0

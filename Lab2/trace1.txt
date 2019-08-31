@@ -1,0 +1,26 @@
+# Set memory size to 64K
+memsize 10000
+
+# Store some bytes and then check values
+store   81 82 83 84 85  efa0
+store   92  efa2
+diff    81 82 92 84 85  efa0
+
+# Try storing at end of memory
+store   aa  bb  fffe
+diff    aa  bb  fffe
+
+# Test replicate
+replicate de b  ef0b
+diff  00 de de de de de de de de de de de 00 ef0a
+
+# Test duplicate
+replicate cc  10    ef20
+duplicate 5   ef20  ef0c
+diff de cc cc cc cc cc de ef0b
+diff    81 82 92 84 85  efa0
+
+# Test print
+replicate aa 40 efc0
+print 100 ef00
+print 10 fff0
